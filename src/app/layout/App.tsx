@@ -4,11 +4,15 @@ import axios from 'axios';
 import '../../App.css';
 import { Product } from "../../models/product";
 import Catalog from '../features/catalog/Catalog';
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Container, createTheme, ThemeProvider } from '@mui/material';
+import Navbar from './Navbar';
+import { CssBaseline } from '@mui/material';//+
 
 
 function App() {
   const [products, setProduct] = useState<Product[]>([]);
+  const [darkMode, setDarkMode] = useState(true)
+  const palateType = darkMode ? 'dark' : 'light';
 
   useEffect(() => {
     axios.get("http://localhost:5051/api/products")
@@ -20,28 +24,38 @@ function App() {
       });
   }, []);
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  }
 
-  const addProduct = (() => {
-    setProduct((prevState) => [...prevState, {
-      id: prevState.length + 1,
-      name: `Your ${prevState.length + 1} Product`,
-      description: "A new product description",
-      price: (prevState.length  * 100) + 100,
-      pictureUrl: "https://via.placeholder.com/150",
-      type: "Electronics",
-      brand: "Samsung",
-      quantityStock: 10,
-    }])
-  })
+  const darkTheme = createTheme({
+    palette: {
+      mode: palateType,
+      background: {
+        default: (palateType === "light") ? '#eaeaea' : '#121212'
+      }
+    },
+  });
 
   return (
-    <Container maxWidth="xl">
-      <Box display="flex" gap={3} justifyContent="center" marginY={3} >
-        <Typography variant='h4'>Re Store</Typography>
-        <Button variant="contained" onClick={addProduct}>Add Product</Button>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>
+      <Box sx={{
+        height: '100vh', 
+        background: darkMode
+        ? 'radial-gradient(circle, #1e3aba, #111B27)'
+        : 'radial-gradient(circle, #baecef9, #f0f9ff)',
+        py: 6
+      }}>
+        <Container
+          maxWidth="xl"
+          sx={{ mt: 6}}
+        >
+          <Catalog products={products} />
+        </Container>
       </Box>
-      <Catalog products={products} />
-    </Container>
+    </ThemeProvider>
   );
 }
 
