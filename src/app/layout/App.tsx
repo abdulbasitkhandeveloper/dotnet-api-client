@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../../App.css';
 import { Product } from "../../models/product";
 import Catalog from '../features/catalog/Catalog';
+import { Box, Button, Container, Typography } from '@mui/material';
 
 
 function App() {
@@ -34,10 +35,13 @@ function App() {
   })
 
   return (
-    <div className="App">
-      <h1>Re Store</h1>
-      <Catalog products={products} addProduct={addProduct}/>
-    </div>
+    <Container maxWidth="xl">
+      <Box display="flex" gap={3} justifyContent="center" marginY={3} >
+        <Typography variant='h4'>Re Store</Typography>
+        <Button variant="contained" onClick={addProduct}>Add Product</Button>
+      </Box>
+      <Catalog products={products} />
+    </Container>
   );
 }
 
