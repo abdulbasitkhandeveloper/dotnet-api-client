@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Product } from '../../../models/product'
 import ProductList from './ProductList'
+import axios from 'axios';
 
-type Props = {
-   products: Product[],
-}
+export default function Catalog() {
+    const [products, setProduct] = useState<Product[]>([]);
 
-export default function Catalog({products}: Props) {
+    useEffect(() => {
+      axios.get("http://localhost:5051/api/products")
+        .then((response) => {
+          setProduct(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
+    }, []);
+  
   return (
     <>
       <ProductList products={products} />
