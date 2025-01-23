@@ -40,7 +40,7 @@ function App() {
           sx={{ mt: 6}}
         >
           <Outlet />
-        </Container>
+      </Container>
       </Box>
     </ThemeProvider>
   );
