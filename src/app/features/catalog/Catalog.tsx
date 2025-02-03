@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Product } from '../../../models/product'
+import React from 'react'
 import ProductList from './ProductList'
-import axios from 'axios';
+import { useFetchProductsQuery } from './CatalogAPi';
 
 export default function Catalog() {
-    const [products, setProduct] = useState<Product[]>([]);
+  const {data: products, isLoading} = useFetchProductsQuery()
 
-    useEffect(() => {
-      axios.get("http://localhost:5051/api/products")
-        .then((response) => {
-          setProduct(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data: ", error);
-        });
-    }, []);
+  if (!products || isLoading) return <p>Loading...</p>
   
   return (
     <>
