@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Product } from '../../../models/product';
-import axios from 'axios';
 import { Button, Divider, Grid2, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from '@mui/material';
+import { useFetchProductDetailsQuery } from './CatalogAPi';
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const {data: product, isLoading} = useFetchProductDetailsQuery(id ? +id : 0);
 
-  useEffect(() => { 
-    axios.get(`http://localhost:5051/api/products/${id}`)
-      .then((response) => setProduct(response.data))
-      .catch((error) => { console.error(error) })
-  }, [id]);
-
-  if (!product) return <p>Loading...</p>
+  if (!product || isLoading) return <p>Loading...</p>
 
   const ProductDetails = [
     { label: "Name", value: product.name },
